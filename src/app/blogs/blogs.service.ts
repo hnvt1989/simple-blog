@@ -39,12 +39,11 @@ import { AuthService } from '../auth/auth.service';
 //   )
 // ]
 
-interface PlaceData {
-  availableFrom: string;
-  availableTo: string;
-  description: string;
+interface BlogData {
   imageUrl: string;
-  price: number;
+  author: string;
+  description: string;
+  content: string;
   title: string;
   userId: string;
 }
@@ -52,7 +51,7 @@ interface PlaceData {
 @Injectable({
   providedIn: 'root'
 })
-export class PlacesService {
+export class BlogsService {
   private _places = new BehaviorSubject<Blog[]>([]);
 
   get places() {
@@ -63,7 +62,7 @@ export class PlacesService {
 
   fetchPlaces() {
     return this.http
-      .get<{ [key: string]: PlaceData }>(
+      .get<{ [key: string]: BlogData }>(
         'https://ionic-angular-course.firebaseio.com/offered-places.json'
       )
       .pipe(
@@ -77,9 +76,7 @@ export class PlacesService {
                   resData[key].title,
                   resData[key].description,
                   resData[key].imageUrl,
-                  //resData[key].price,
-                  //new Date(resData[key].availableFrom),
-                  //new Date(resData[key].availableTo),
+                  resData[key].author,
                   resData[key].content,
                   resData[key].userId
                 )
@@ -97,7 +94,7 @@ export class PlacesService {
 
   getPlace(id: string) {
     return this.http
-      .get<PlaceData>(
+      .get<BlogData>(
         `https://ionic-angular-course.firebaseio.com/offered-places/${id}.json`
       )
       .pipe(
@@ -107,9 +104,7 @@ export class PlacesService {
             placeData.title,
             placeData.description,
             placeData.imageUrl,
-            placeData.price,
-            //new Date(placeData.availableFrom),
-            //new Date(placeData.availableTo),
+            placeData.author,
             placeData.content,
             placeData.userId
           );
@@ -117,22 +112,20 @@ export class PlacesService {
       );
   }
 
-  addPlace(
+  addBlog(
     title: string,
     description: string,
-    price: number,
-    dateFrom: Date,
-    dateTo: Date
+    author,
+    content
   ) {
     let generatedId: string;
-    const newPlace = new Place(
+    const newPlace = new Blog(
       Math.random().toString(),
       title,
       description,
       'https://lonelyplanetimages.imgix.net/mastheads/GettyImages-538096543_medium.jpg?sharp=10&vib=20&w=1200',
-      price,
-      dateFrom,
-      dateTo,
+      author,
+      content,
       this.authService.userId
     );
     return this.http
@@ -163,8 +156,8 @@ export class PlacesService {
     // );
   }
 
-  updatePlace(placeId: string, title: string, description: string) {
-    let updatedPlaces: Place[];
+  updateBlog(placeId: string, title: string, description: string, content: string) {
+    let updatedPlaces: Blog[];
     return this.places.pipe(
       take(1),
       switchMap(places => {
@@ -178,14 +171,13 @@ export class PlacesService {
         const updatedPlaceIndex = places.findIndex(pl => pl.id === placeId);
         updatedPlaces = [...places];
         const oldPlace = updatedPlaces[updatedPlaceIndex];
-        updatedPlaces[updatedPlaceIndex] = new Place(
+        updatedPlaces[updatedPlaceIndex] = new Blog(
           oldPlace.id,
           title,
           description,
           oldPlace.imageUrl,
-          oldPlace.price,
-          oldPlace.availableFrom,
-          oldPlace.availableTo,
+          oldPlace.author,
+          content,
           oldPlace.userId
         );
         return this.http.put(

@@ -8,16 +8,16 @@ import {
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { PlacesService } from '../../places.service';
-import { Place } from '../../place.model';
+import { BlogsService } from '../../blogs.service';
+import { Blog } from '../../blog.model';
 
 @Component({
-  selector: 'app-edit-offer',
-  templateUrl: './edit-offer.page.html',
-  styleUrls: ['./edit-offer.page.scss']
+  selector: 'app-edit-blog',
+  templateUrl: './edit-blog.page.html',
+  styleUrls: ['./edit-blog.page.scss']
 })
-export class EditOfferPage implements OnInit, OnDestroy {
-  place: Place;
+export class EditBlogPage implements OnInit, OnDestroy {
+  blog: Blog;
   placeId: string;
   form: FormGroup;
   isLoading = false;
@@ -25,7 +25,7 @@ export class EditOfferPage implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private placesService: PlacesService,
+    private blogsService: BlogsService,
     private navCtrl: NavController,
     private router: Router,
     private loadingCtrl: LoadingController,
@@ -40,17 +40,17 @@ export class EditOfferPage implements OnInit, OnDestroy {
       }
       this.placeId = paramMap.get('placeId');
       this.isLoading = true;
-      this.placeSub = this.placesService
+      this.placeSub = this.blogsService
         .getPlace(paramMap.get('placeId'))
         .subscribe(
-          place => {
-            this.place = place;
+          blog => {
+            this.blog = blog;
             this.form = new FormGroup({
-              title: new FormControl(this.place.title, {
+              title: new FormControl(this.blog.title, {
                 updateOn: 'blur',
                 validators: [Validators.required]
               }),
-              description: new FormControl(this.place.description, {
+              description: new FormControl(this.blog.description, {
                 updateOn: 'blur',
                 validators: [Validators.required, Validators.maxLength(180)]
               })
@@ -89,11 +89,12 @@ export class EditOfferPage implements OnInit, OnDestroy {
       })
       .then(loadingEl => {
         loadingEl.present();
-        this.placesService
-          .updatePlace(
-            this.place.id,
+        this.blogsService
+          .updateBlog(
+            this.blog.id,
             this.form.value.title,
-            this.form.value.description
+            this.form.value.description,
+            this.form.value.content
           )
           .subscribe(() => {
             loadingEl.dismiss();

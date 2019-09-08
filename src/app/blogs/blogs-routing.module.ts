@@ -9,48 +9,48 @@ const routes: Routes = [
     component: BlogsPage,
     children: [
       {
-        path: 'discover',
+        path: 'allblogs',
         children: [
           {
             path: '',
-            loadChildren: './discover/discover.module#DiscoverPageModule'
+            loadChildren: './blogs.module#BlogsPageModule'
           },
           {
-            path: ':placeId',
+            path: ':blogId',
             loadChildren:
-              './discover/place-detail/place-detail.module#PlaceDetailPageModule'
+              './allblogs/blog-detail/blog-detail.module#BlogDetailPageModule'
           }
         ]
       },
       {
-        path: 'offers',
+        path: 'myblogs',
         children: [
-          {
-            path: '',
-            loadChildren: './offers/offers.module#OffersPageModule'
-          },
-          {
-            path: 'new',
-            loadChildren:
-              './offers/new-offer/new-offer.module#NewOfferPageModule'
-          },
-          {
-            path: 'edit/:placeId',
-            loadChildren:
-              './offers/edit-offer/edit-offer.module#EditOfferPageModule'
-          }
+          // {
+          //   path: '',
+          //   loadChildren: './myblogs/myblogs.module#OffersPageModule'
+          // },
+          // {
+          //   path: 'new',
+          //   loadChildren:
+          //     './myblogs/new-blog/new-blog.module#NewBlogPageModule'
+          // },
+          // {
+          //   path: 'edit/:blogId',
+          //   loadChildren:
+          //     './myblogs/edit-blog/edit-blog.module#EditBlogPageModule'
+          // }
         ]
       },
       {
         path: '',
-        redirectTo: '/places/tabs/discover',
+        redirectTo: '/blogs/tabs/allblogs',
         pathMatch: 'full'
       }
     ]
   },
   {
     path: '',
-    redirectTo: '/places/tabs/discover',
+    redirectTo: '/blogs/tabs/allblogs',
     pathMatch: 'full'
   }
 ];

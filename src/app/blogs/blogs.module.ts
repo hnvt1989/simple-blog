@@ -14,4 +14,4 @@ import { BlogsRoutingModule } from './blogs-routing.module';
   ],
   declarations: [BlogsPage]
 })
-export class PlacesPageModule {}
+export class BlogsPageModule {}

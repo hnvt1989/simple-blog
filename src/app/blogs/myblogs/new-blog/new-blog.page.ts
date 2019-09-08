@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 
-import { PlacesService } from '../../places.service';
+import { BlogsService } from '../../blogs.service';
 
 @Component({
   selector: 'app-new-offer',
@@ -14,7 +14,7 @@ export class NewOfferPage implements OnInit {
   form: FormGroup;
 
   constructor(
-    private placesService: PlacesService,
+    private blogsService: BlogsService,
     private router: Router,
     private loadingCtrl: LoadingController
   ) {}
@@ -54,18 +54,17 @@ export class NewOfferPage implements OnInit {
       })
       .then(loadingEl => {
         loadingEl.present();
-        this.placesService
-          .addPlace(
+        this.blogsService
+          .addBlog(
             this.form.value.title,
             this.form.value.description,
-            +this.form.value.price,
-            new Date(this.form.value.dateFrom),
-            new Date(this.form.value.dateTo)
+            this.form.value.author,
+            this.form.value.content
           )
           .subscribe(() => {
             loadingEl.dismiss();
             this.form.reset();
-            this.router.navigate(['/places/tabs/offers']);
+            this.router.navigate(['/blogs/tabs/myblogs']);
           });
       });
   }
