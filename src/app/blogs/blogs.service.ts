@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, of } from 'rxjs';
 import { take, map, tap, delay, switchMap } from 'rxjs/operators';
 
-import { Place } from './place.model';
+import { Blog } from './blog.model';
 import { AuthService } from '../auth/auth.service';
 
 // [
@@ -53,7 +53,7 @@ interface PlaceData {
   providedIn: 'root'
 })
 export class PlacesService {
-  private _places = new BehaviorSubject<Place[]>([]);
+  private _places = new BehaviorSubject<Blog[]>([]);
 
   get places() {
     return this._places.asObservable();
@@ -72,14 +72,15 @@ export class PlacesService {
           for (const key in resData) {
             if (resData.hasOwnProperty(key)) {
               places.push(
-                new Place(
+                new Blog(
                   key,
                   resData[key].title,
                   resData[key].description,
                   resData[key].imageUrl,
-                  resData[key].price,
-                  new Date(resData[key].availableFrom),
-                  new Date(resData[key].availableTo),
+                  //resData[key].price,
+                  //new Date(resData[key].availableFrom),
+                  //new Date(resData[key].availableTo),
+                  resData[key].content,
                   resData[key].userId
                 )
               );
@@ -101,14 +102,15 @@ export class PlacesService {
       )
       .pipe(
         map(placeData => {
-          return new Place(
+          return new Blog(
             id,
             placeData.title,
             placeData.description,
             placeData.imageUrl,
             placeData.price,
-            new Date(placeData.availableFrom),
-            new Date(placeData.availableTo),
+            //new Date(placeData.availableFrom),
+            //new Date(placeData.availableTo),
+            placeData.content,
             placeData.userId
           );
         })

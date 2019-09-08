@@ -1,12 +1,11 @@
-export class Place {
+export class Blog {
   constructor(
     public id: string,
     public title: string,
     public description: string,
     public imageUrl: string,
-    public price: number,
-    public availableFrom: Date,
-    public availableTo: Date,
+    public author: string,
+    public content: string,
     public userId: string
   ) {}
 }

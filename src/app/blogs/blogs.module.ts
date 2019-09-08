@@ -3,15 +3,15 @@ import { CommonModule } from '@angular/common';
 
 import { IonicModule } from '@ionic/angular';
 
-import { PlacesPage } from './places.page';
-import { PlacesRoutingModule } from './places-routing.module';
+import { BlogsPage } from './blogs.page';
+import { BlogsRoutingModule } from './blogs-routing.module';
 
 @NgModule({
   imports: [
     CommonModule,
     IonicModule,
-    PlacesRoutingModule
+    BlogsRoutingModule
   ],
-  declarations: [PlacesPage]
+  declarations: [BlogsPage]
 })
 export class PlacesPageModule {}
