@@ -6,11 +6,12 @@ import { LoadingController } from '@ionic/angular';
 import { BlogsService } from '../../blogs.service';
 
 @Component({
-  selector: 'app-new-offer',
-  templateUrl: './new-offer.page.html',
-  styleUrls: ['./new-offer.page.scss']
+  selector: 'app-new-blog',
+  templateUrl: './new-blog.page.html',
+  styleUrls: ['./new-blog.page.scss']
 })
-export class NewOfferPage implements OnInit {
+
+export class NewBlogPage implements OnInit {
   form: FormGroup;
 
   constructor(
@@ -44,13 +45,13 @@ export class NewOfferPage implements OnInit {
     });
   }
 
-  onCreateOffer() {
+  onCreateBlog() {
     if (!this.form.valid) {
       return;
     }
     this.loadingCtrl
       .create({
-        message: 'Creating place...'
+        message: 'Creating blog...'
       })
       .then(loadingEl => {
         loadingEl.present();

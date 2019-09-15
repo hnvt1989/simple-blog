@@ -27,4 +27,4 @@ const routes: Routes = [
   declarations: [BlogDetailPage],
   entryComponents: []
 })
-export class PlaceDetailPageModule {}
+export class BlogDetailPageModule {}

@@ -6,6 +6,7 @@ export class Blog {
     public imageUrl: string,
     public author: string,
     public content: string,
-    public userId: string
+    public userId: string,
+    public lastModified: Date
   ) {}
 }

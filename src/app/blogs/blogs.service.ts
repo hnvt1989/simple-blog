@@ -46,24 +46,25 @@ interface BlogData {
   content: string;
   title: string;
   userId: string;
+  modifiedDate: Date;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class BlogsService {
-  private _places = new BehaviorSubject<Blog[]>([]);
+  private _blogs = new BehaviorSubject<Blog[]>([]);
 
-  get places() {
-    return this._places.asObservable();
+  get blogs() {
+    return this._blogs.asObservable();
   }
 
   constructor(private authService: AuthService, private http: HttpClient) {}
 
-  fetchPlaces() {
+  fetchBlogs() {
     return this.http
       .get<{ [key: string]: BlogData }>(
-        'https://ionic-angular-course.firebaseio.com/offered-places.json'
+        'https://qx4ddaiej5.execute-api.us-east-1.amazonaws.com/dev/blogs/all'
       )
       .pipe(
         map(resData => {
@@ -78,7 +79,8 @@ export class BlogsService {
                   resData[key].imageUrl,
                   resData[key].author,
                   resData[key].content,
-                  resData[key].userId
+                  resData[key].userId,
+                  new Date(resData[key].modifiedDate)
                 )
               );
             }
@@ -86,27 +88,61 @@ export class BlogsService {
           return places;
           // return [];
         }),
-        tap(places => {
-          this._places.next(places);
+        tap(blogs => {
+          this._blogs.next(blogs);
         })
       );
   }
 
-  getPlace(id: string) {
+  fetchMyBlogs(userId: string) {
+    return this.http
+      .get<{ [key: string]: BlogData }>(
+        'https://qx4ddaiej5.execute-api.us-east-1.amazonaws.com/dev/blogs/all'
+      )
+      .pipe(
+        map(resData => {
+          const blogs = [];
+          for (const key in resData) {
+            if (resData.hasOwnProperty(key) && resData[key].userId === userId) {
+              blogs.push(
+                new Blog(
+                  key,
+                  resData[key].title,
+                  resData[key].description,
+                  resData[key].imageUrl,
+                  resData[key].author,
+                  resData[key].content,
+                  resData[key].userId,
+                  new Date(resData[key].modifiedDate)
+                )
+              );
+            }
+          }
+          return blogs;
+          // return [];
+        }),
+        tap(blogs => {
+          this._blogs.next(blogs);
+        })
+      );
+  }
+
+  getBlog(id: string) {
     return this.http
       .get<BlogData>(
         `https://ionic-angular-course.firebaseio.com/offered-places/${id}.json`
       )
       .pipe(
-        map(placeData => {
+        map(blogData => {
           return new Blog(
             id,
-            placeData.title,
-            placeData.description,
-            placeData.imageUrl,
-            placeData.author,
-            placeData.content,
-            placeData.userId
+            blogData.title,
+            blogData.description,
+            blogData.imageUrl,
+            blogData.author,
+            blogData.content,
+            blogData.userId,
+            new Date(blogData.modifiedDate)
           );
         })
       );
@@ -119,32 +155,33 @@ export class BlogsService {
     content
   ) {
     let generatedId: string;
-    const newPlace = new Blog(
+    const newBlog = new Blog(
       Math.random().toString(),
       title,
       description,
       'https://lonelyplanetimages.imgix.net/mastheads/GettyImages-538096543_medium.jpg?sharp=10&vib=20&w=1200',
       author,
       content,
-      this.authService.userId
+      this.authService.userId,
+      new Date()
     );
     return this.http
       .post<{ name: string }>(
         'https://ionic-angular-course.firebaseio.com/offered-places.json',
         {
-          ...newPlace,
+          ...newBlog,
           id: null
         }
       )
       .pipe(
         switchMap(resData => {
           generatedId = resData.name;
-          return this.places;
+          return this.blogs;
         }),
         take(1),
-        tap(places => {
-          newPlace.id = generatedId;
-          this._places.next(places.concat(newPlace));
+        tap(blogs => {
+          newBlog.id = generatedId;
+          this._blogs.next(blogs.concat(newBlog));
         })
       );
     // return this.places.pipe(
@@ -156,37 +193,38 @@ export class BlogsService {
     // );
   }
 
-  updateBlog(placeId: string, title: string, description: string, content: string) {
-    let updatedPlaces: Blog[];
-    return this.places.pipe(
+  updateBlog(blogId: string, title: string, description: string, content: string) {
+    let updatedBlogs: Blog[];
+    return this.blogs.pipe(
       take(1),
-      switchMap(places => {
-        if (!places || places.length <= 0) {
-          return this.fetchPlaces();
+      switchMap(blogs => {
+        if (!blogs || blogs.length <= 0) {
+          return this.fetchBlogs();
         } else {
-          return of(places);
+          return of(blogs);
         }
       }),
-      switchMap(places => {
-        const updatedPlaceIndex = places.findIndex(pl => pl.id === placeId);
-        updatedPlaces = [...places];
-        const oldPlace = updatedPlaces[updatedPlaceIndex];
-        updatedPlaces[updatedPlaceIndex] = new Blog(
-          oldPlace.id,
+      switchMap(blogs => {
+        const updatedPlaceIndex = blogs.findIndex(pl => pl.id === blogId);
+        updatedBlogs = [...blogs];
+        const oldBlog = updatedBlogs[updatedPlaceIndex];
+        updatedBlogs[updatedPlaceIndex] = new Blog(
+          oldBlog.id,
           title,
           description,
-          oldPlace.imageUrl,
-          oldPlace.author,
+          oldBlog.imageUrl,
+          oldBlog.author,
           content,
-          oldPlace.userId
+          oldBlog.userId,
+          new Date()
         );
         return this.http.put(
-          `https://ionic-angular-course.firebaseio.com/offered-places/${placeId}.json`,
-          { ...updatedPlaces[updatedPlaceIndex], id: null }
+          `https://ionic-angular-course.firebaseio.com/offered-places/${blogId}.json`,
+          { ...updatedBlogs[updatedPlaceIndex], id: null }
         );
       }),
       tap(() => {
-        this._places.next(updatedPlaces);
+        this._blogs.next(updatedBlogs);
       })
     );
   }

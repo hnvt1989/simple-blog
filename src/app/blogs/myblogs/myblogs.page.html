@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>My Offers</ion-title>
+    <ion-title>My Blogs</ion-title>
     <ion-buttons slot="primary">
       <ion-button routerLink="/places/tabs/offers/new">
         <ion-icon name="add" slot="icon-only"></ion-icon>
@@ -19,19 +19,19 @@
         <div *ngIf="isLoading" text-center>
           <ion-spinner color="primary"></ion-spinner>
         </div>
-        <div text-center *ngIf="!isLoading && offers.length <= 0">
-          <p>No offers found! Please create one first!</p>
+        <div text-center *ngIf="!isLoading && blogs.length <= 0">
+          <p>No blogs found! Please create one first!</p>
           <ion-button color="primary" routerLink="/places/tabs/offers/new"
-            >Offer New Place</ion-button
+            >Create new blog</ion-button
           >
         </div>
-        <ion-list *ngIf="!isLoading && offers.length > 0">
-          <ion-item-sliding *ngFor="let offer of offers" #slidingItem>
-            <app-offer-item [offer]="offer"></app-offer-item>
+        <ion-list *ngIf="!isLoading && blogs.length > 0">
+          <ion-item-sliding *ngFor="let blog of blogs" #slidingItem>
+            <app-blog-item [blog]="blog"></app-blog-item>
             <ion-item-options side="end">
               <ion-item-option
                 color="secondary"
-                (click)="onEdit(offer.id, slidingItem)"
+                (click)="onEdit(blog.id, slidingItem)"
               >
                 <ion-icon name="create" slot="icon-only"></ion-icon>
               </ion-item-option>

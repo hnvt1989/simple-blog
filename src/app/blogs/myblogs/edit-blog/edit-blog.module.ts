@@ -23,4 +23,4 @@ const routes: Routes = [
   ],
   declarations: [EditBlogPage]
 })
-export class EditOfferPageModule {}
+export class EditBlogPageModule {}

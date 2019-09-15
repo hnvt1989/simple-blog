@@ -8,7 +8,7 @@ const routes: Routes = [
   { path: 'auth', loadChildren: './auth/auth.module#AuthPageModule' },
   {
     path: 'blogs',
-    loadChildren: './blogs/blogs.module#BlogsPageModule',
+    loadChildren: './blogs/blogs.page.module#BlogsPageModule',
     canLoad: [AuthGuard]
   },
   // {

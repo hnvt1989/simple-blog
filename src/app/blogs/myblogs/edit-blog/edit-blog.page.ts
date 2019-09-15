@@ -21,7 +21,7 @@ export class EditBlogPage implements OnInit, OnDestroy {
   placeId: string;
   form: FormGroup;
   isLoading = false;
-  private placeSub: Subscription;
+  private blogSub: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -40,8 +40,8 @@ export class EditBlogPage implements OnInit, OnDestroy {
       }
       this.placeId = paramMap.get('placeId');
       this.isLoading = true;
-      this.placeSub = this.blogsService
-        .getPlace(paramMap.get('placeId'))
+      this.blogSub = this.blogsService
+        .getBlog(paramMap.get('placeId'))
         .subscribe(
           blog => {
             this.blog = blog;
@@ -66,7 +66,7 @@ export class EditBlogPage implements OnInit, OnDestroy {
                   {
                     text: 'Okay',
                     handler: () => {
-                      this.router.navigate(['/places/tabs/offers']);
+                      this.router.navigate(['/myblogs/tabs/allblogs']);
                     }
                   }
                 ]
@@ -85,7 +85,7 @@ export class EditBlogPage implements OnInit, OnDestroy {
     }
     this.loadingCtrl
       .create({
-        message: 'Updating place...'
+        message: 'Updating blog...'
       })
       .then(loadingEl => {
         loadingEl.present();
@@ -105,8 +105,8 @@ export class EditBlogPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.placeSub) {
-      this.placeSub.unsubscribe();
+    if (this.blogSub) {
+      this.blogSub.unsubscribe();
     }
   }
 }

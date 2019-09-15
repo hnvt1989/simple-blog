@@ -7,7 +7,8 @@ import { Blog } from '../../blog.model';
   templateUrl: './blog-item.component.html',
   styleUrls: ['./blog-item.component.scss']
 })
-export class OfferItemComponent implements OnInit {
+
+export class BlogItemComponent implements OnInit {
   @Input() blog: Blog;
 
   constructor() { }

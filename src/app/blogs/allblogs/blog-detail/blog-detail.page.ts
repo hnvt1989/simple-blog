@@ -22,7 +22,7 @@ export class BlogDetailPage implements OnInit, OnDestroy {
   blog: Blog;
   isBookable = false;
   isLoading = false;
-  private placeSub: Subscription;
+  private blogSub: Subscription;
 
   constructor(
     private navCtrl: NavController,
@@ -43,8 +43,8 @@ export class BlogDetailPage implements OnInit, OnDestroy {
         return;
       }
       this.isLoading = true;
-      this.placeSub = this.blogsService
-        .getPlace(paramMap.get('placeId'))
+      this.blogSub = this.blogsService
+        .getBlog(paramMap.get('placeId'))
         .subscribe(
           blog => {
             this.blog = blog;
@@ -140,8 +140,8 @@ export class BlogDetailPage implements OnInit, OnDestroy {
   // }
 
   ngOnDestroy() {
-    if (this.placeSub) {
-      this.placeSub.unsubscribe();
+    if (this.blogSub) {
+      this.blogSub.unsubscribe();
     }
   }
 }

@@ -13,32 +13,32 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: './blogs.module#BlogsPageModule'
+            //loadChildren: './blogs.page.module#BlogsPageModule'
+            loadChildren: './allblogs/allblogs.module#AllBlogsPageModule'
           },
           {
             path: ':blogId',
-            loadChildren:
-              './allblogs/blog-detail/blog-detail.module#BlogDetailPageModule'
+            loadChildren: './allblogs/blog-detail/blog-detail.module#BlogDetailPageModule'
           }
         ]
       },
       {
         path: 'myblogs',
         children: [
-          // {
-          //   path: '',
-          //   loadChildren: './myblogs/myblogs.module#OffersPageModule'
-          // },
-          // {
-          //   path: 'new',
-          //   loadChildren:
-          //     './myblogs/new-blog/new-blog.module#NewBlogPageModule'
-          // },
-          // {
-          //   path: 'edit/:blogId',
-          //   loadChildren:
-          //     './myblogs/edit-blog/edit-blog.module#EditBlogPageModule'
-          // }
+          {
+            path: '',
+            loadChildren: './myblogs/myblogs.module#MyBlogsPageModule'
+          },
+          {
+            path: 'new',
+            loadChildren:
+              './myblogs/new-blog/new-blog.module#NewBlogPageModule'
+          },
+          {
+            path: 'edit/:blogId',
+            loadChildren:
+              './myblogs/edit-blog/edit-blog.module#EditBlogPageModule'
+          }
         ]
       },
       {
